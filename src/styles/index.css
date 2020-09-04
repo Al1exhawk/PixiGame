@@ -1,0 +1,19 @@
+@font-face {
+    font-family: DR;
+    src: url('../assets/font/DRAguSans-Black.ttf');
+}
+
+html,
+body {
+    padding: 0;
+    margin: 0;
+    font-family: DR;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
