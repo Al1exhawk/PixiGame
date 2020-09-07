@@ -32,7 +32,7 @@ const tentSmallURL = 'assets/magic_forest_tent_small.png';
 const ropeURL = 'assets/magic_forest_rope.png';
 const ropeSmallURL = 'assets/magic_forest_rope_small.png';
 
-const coinURL = 'assets/magic_forest_coin_icon.png';
+const coinURL = 'assets/magic_forest_coin_icon_big.png';
 const coinSmallURL = 'assets/magic_forest_coin_icon_small.png';
 
 const cardFrameURL = 'assets/magic_forest_frame.png';
@@ -48,6 +48,11 @@ const shadowURL = 'assets/magic_forest_shadow_40_percent.png';
 const winMaxURL = 'assets/magic_forest_win_up_to_100.png';
 
 const resultFrameURL = 'assets/magic_forest_frame1.png';
+
+const startFrameURL = 'assets/magic_forest_frame2.png';
+const startButtonURL = 'assets/magic_forest_button.png';
+
+const questionMarkURL = 'assets/magic_forest_question_icon.png';
 
 export {
     App,
@@ -80,4 +85,7 @@ export {
     Text,
     TextStyle,
     winMaxURL,
+    startFrameURL,
+    startButtonURL,
+    questionMarkURL,
 };

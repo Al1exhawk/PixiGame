@@ -21,6 +21,11 @@ import {
     TextStyle,
     shadowURL,
     winMaxURL,
+    coinURL,
+    coinSmallURL,
+    startFrameURL,
+    startButtonURL,
+    questionMarkURL,
 } from './aliases';
 
 const app = new App({
@@ -43,6 +48,11 @@ Loader.add([
     { url: shadowURL },
     { url: winMaxURL },
     { url: resultFrameURL },
+    { url: coinURL },
+    { url: coinSmallURL },
+    { url: startFrameURL },
+    { url: startButtonURL },
+    { url: questionMarkURL },
 ]).load((_loader, resources: Record<string, any>) => {
     const w = app.screen.width;
     const h = app.screen.height;
@@ -53,9 +63,85 @@ Loader.add([
     const bow = new Sprite(resources[bowURL].texture);
     const char = new Spine(resources[charURL].spineData);
 
+    // RESULT FRAME AND SHADOW
+    const resultFrame = new Sprite(resources[resultFrameURL].texture);
+    resultFrame.anchor.set(0.5);
+    resultFrame.position.set(w / 2, 400);
+    resultFrame.height += 50;
+
+    const resultStyle = new TextStyle({
+        fontFamily: 'DR',
+        fontSize: 116,
+        fill: 'red',
+    });
+
+    const resultText = new Text('YOU WiN', resultStyle);
+    const rText = new Text('25', { ...resultStyle, fill: 'black' });
+    resultText.position.y -= 55;
+    rText.position.y += 55;
+    resultText.anchor.set(0.5);
+    rText.anchor.set(0.5);
+    const coin = new Sprite(resources[coinURL].texture);
+    coin.position.y += 65;
+    coin.position.x += 125;
+    coin.anchor.set(0.5);
+    resultFrame.addChild(resultText);
+    resultFrame.addChild(rText);
+    resultFrame.addChild(coin);
+
+    const startFrame = new Sprite(resources[startFrameURL].texture);
+    startFrame.anchor.set(0.5);
+    startFrame.position.set(w / 2 + 15, h + 320);
+
+    const startTextStyle = new TextStyle({
+        fontFamily: 'DR',
+        fontSize: 72,
+        fill: 'white',
+        align: 'center',
+    });
+
+    const buttonText = new Text('Play for 60', startTextStyle);
+    const hintText = new Text('How to play', {
+        ...startTextStyle,
+        fill: 'orange',
+    });
+    hintText.anchor.set(0.5);
+    buttonText.anchor.set(0.5);
+    buttonText.position.y -= 25;
+
+    const startButton = new Sprite(resources[startButtonURL].texture);
+    const questionMark = new Sprite(resources[questionMarkURL].texture);
+    const coin1 = new Sprite(resources[coinSmallURL].texture);
+    startButton.anchor.set(0.5);
+    questionMark.anchor.set(0.5);
+    coin1.anchor.set(0.5);
+    coin1.position.x += 210;
+    coin1.position.y -= 20;
+
+    startButton.interactive = true;
+
+    startButton.on('click', () => {
+        console.log(123);
+    });
+
+    startButton.position.y += 100;
+    startButton.height += 50;
+    startButton.addChild(buttonText);
+    startButton.addChild(coin1);
+
+    hintText.position.y -= 105;
+    questionMark.position.x -= 220;
+
+    startFrame.addChild(startButton);
+    startFrame.addChild(hintText);
+    hintText.addChild(questionMark);
+
     const shadow = new Sprite(resources[shadowURL].texture);
+    shadow.addChild(resultFrame);
+    shadow.addChild(startFrame);
     shadow.width = w;
     shadow.height = h;
+    ///////////////////////////////////////////////////////////////////////////
 
     const winMax = new Sprite(resources[winMaxURL].texture);
     winMax.anchor.set(0.5);
@@ -65,6 +151,7 @@ Loader.add([
 
     if (char.state.hasAnimation('red_idle_loop')) {
         char.state.setAnimation(0, 'red_idle_loop', true);
+        console.log(char.state.data);
     }
 
     const bonfireSmall = new Sprite(resources[bonfireSmallURL].texture);
@@ -117,7 +204,7 @@ Loader.add([
         fontFamily: 'DR',
         fontSize: 52,
         align: 'center',
-        fill: 'orange',
+        fill: 'red',
     });
 
     const descriptionText = new Text(
