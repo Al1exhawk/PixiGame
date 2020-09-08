@@ -27,210 +27,222 @@ import {
     startButtonURL,
     questionMarkURL,
 } from './aliases';
+import { Game } from './Game';
 
-const app = new App({
-    width: 1097,
-    height: 1920,
-});
+const game = new Game();
+game.load();
 
-document.body.appendChild(app.view);
+// const app = new App({
+//     width: 1097,
+//     height: 1920,
+// });
 
-Loader.add([
-    { url: forestURL },
-    { url: bonfireSmallURL },
-    { url: bonfireURL },
-    { url: bowURL },
-    { url: bonusFrameURL },
-    { url: descriptionFrameURL },
-    { url: cardFrameURL },
-    { url: charURL },
-    { url: scratchFrameURL },
-    { url: shadowURL },
-    { url: winMaxURL },
-    { url: resultFrameURL },
-    { url: coinURL },
-    { url: coinSmallURL },
-    { url: startFrameURL },
-    { url: startButtonURL },
-    { url: questionMarkURL },
-]).load((_loader, resources: Record<string, any>) => {
-    const w = app.screen.width;
-    const h = app.screen.height;
-    let rectangle = new Rectangle(155, 0, w - 2, h);
+// document.body.appendChild(app.view);
 
-    const background = resources[forestURL].texture;
-    const descriptionFrame = new Sprite(resources[descriptionFrameURL].texture);
-    const bow = new Sprite(resources[bowURL].texture);
-    const char = new Spine(resources[charURL].spineData);
+// Loader.add([
+//     { url: charURL },
+//     { url: forestURL },
+//     { url: bonfireSmallURL },
+//     { url: bonfireURL },
+//     { url: bowURL },
+//     { url: bonusFrameURL },
+//     { url: descriptionFrameURL },
+//     { url: cardFrameURL },
+//     { url: scratchFrameURL },
+//     { url: shadowURL },
+//     { url: winMaxURL },
+//     { url: resultFrameURL },
+//     { url: coinURL },
+//     { url: coinSmallURL },
+//     { url: startFrameURL },
+//     { url: startButtonURL },
+//     { url: questionMarkURL },
+// ]).load((_loader, resources: Record<string, any>) => {
+//     const w = app.screen.width;
+//     const h = app.screen.height;
+//     let rectangle = new Rectangle(155, 0, w - 2, h);
 
-    // RESULT FRAME AND SHADOW
-    const resultFrame = new Sprite(resources[resultFrameURL].texture);
-    resultFrame.anchor.set(0.5);
-    resultFrame.position.set(w / 2, 400);
-    resultFrame.height += 50;
+//     const background = resources[forestURL].texture;
+//     const descriptionFrame = new Sprite(resources[descriptionFrameURL].texture);
+//     const bow = new Sprite(resources[bowURL].texture);
+//     const char = new Spine(resources[charURL].spineData);
 
-    const resultStyle = new TextStyle({
-        fontFamily: 'DR',
-        fontSize: 116,
-        fill: 'red',
-    });
+//     // RESULT FRAME AND SHADOW
+//     const resultFrame = new Sprite(resources[resultFrameURL].texture);
+//     resultFrame.anchor.set(0.5);
+//     resultFrame.position.set(w / 2, 400);
+//     resultFrame.height += 50;
 
-    const resultText = new Text('YOU WiN', resultStyle);
-    const rText = new Text('25', { ...resultStyle, fill: 'black' });
-    resultText.position.y -= 55;
-    rText.position.y += 55;
-    resultText.anchor.set(0.5);
-    rText.anchor.set(0.5);
-    const coin = new Sprite(resources[coinURL].texture);
-    coin.position.y += 65;
-    coin.position.x += 125;
-    coin.anchor.set(0.5);
-    resultFrame.addChild(resultText);
-    resultFrame.addChild(rText);
-    resultFrame.addChild(coin);
+//     const resultStyle = new TextStyle({
+//         fontFamily: 'DR',
+//         fontSize: 116,
+//         fill: 'red',
+//     });
 
-    const startFrame = new Sprite(resources[startFrameURL].texture);
-    startFrame.anchor.set(0.5);
-    startFrame.position.set(w / 2 + 15, h + 320);
+//     console.log(resources);
 
-    const startTextStyle = new TextStyle({
-        fontFamily: 'DR',
-        fontSize: 72,
-        fill: 'white',
-        align: 'center',
-    });
+//     const resultText = new Text('YOU WiN', resultStyle);
+//     const rText = new Text('25', { ...resultStyle, fill: 'black' });
+//     resultText.position.y -= 55;
+//     rText.position.y += 55;
+//     resultText.anchor.set(0.5);
+//     rText.anchor.set(0.5);
+//     const coin = new Sprite(resources[coinURL].texture);
+//     coin.position.y += 65;
+//     coin.position.x += 125;
+//     coin.anchor.set(0.5);
+//     resultFrame.addChild(resultText);
+//     resultFrame.addChild(rText);
+//     resultFrame.addChild(coin);
 
-    const buttonText = new Text('Play for 60', startTextStyle);
-    const hintText = new Text('How to play', {
-        ...startTextStyle,
-        fill: 'orange',
-    });
-    hintText.anchor.set(0.5);
-    buttonText.anchor.set(0.5);
-    buttonText.position.y -= 25;
+//     const startFrame = new Sprite(resources[startFrameURL].texture);
+//     startFrame.anchor.set(0.5);
+//     startFrame.position.set(w / 2 + 15, h + 320);
 
-    const startButton = new Sprite(resources[startButtonURL].texture);
-    const questionMark = new Sprite(resources[questionMarkURL].texture);
-    const coin1 = new Sprite(resources[coinSmallURL].texture);
-    startButton.anchor.set(0.5);
-    questionMark.anchor.set(0.5);
-    coin1.anchor.set(0.5);
-    coin1.position.x += 210;
-    coin1.position.y -= 20;
+//     const startTextStyle = new TextStyle({
+//         fontFamily: 'DR',
+//         fontSize: 72,
+//         fill: 'white',
+//         align: 'center',
+//     });
 
-    startButton.interactive = true;
+//     const buttonText = new Text('Play for 60', startTextStyle);
+//     const hintText = new Text('How to play', {
+//         ...startTextStyle,
+//         fill: 'orange',
+//     });
+//     hintText.anchor.set(0.5);
+//     buttonText.anchor.set(0.5);
+//     buttonText.position.y -= 25;
 
-    startButton.on('click', () => {
-        console.log(123);
-    });
+//     const startButton = new Sprite(resources[startButtonURL].texture);
+//     const questionMark = new Sprite(resources[questionMarkURL].texture);
+//     const coin1 = new Sprite(resources[coinSmallURL].texture);
+//     startButton.anchor.set(0.5);
+//     questionMark.anchor.set(0.5);
+//     coin1.anchor.set(0.5);
+//     coin1.position.x += 210;
+//     coin1.position.y -= 20;
 
-    startButton.position.y += 100;
-    startButton.height += 50;
-    startButton.addChild(buttonText);
-    startButton.addChild(coin1);
+//     startButton.interactive = true;
+//     startButton.buttonMode = true;
 
-    hintText.position.y -= 105;
-    questionMark.position.x -= 220;
+//     startButton.position.y += 100;
+//     startButton.height += 50;
+//     startButton.addChild(buttonText);
+//     startButton.addChild(coin1);
 
-    startFrame.addChild(startButton);
-    startFrame.addChild(hintText);
-    hintText.addChild(questionMark);
+//     hintText.position.y -= 105;
+//     questionMark.position.x -= 220;
 
-    const shadow = new Sprite(resources[shadowURL].texture);
-    shadow.addChild(resultFrame);
-    shadow.addChild(startFrame);
-    shadow.width = w;
-    shadow.height = h;
-    ///////////////////////////////////////////////////////////////////////////
+//     startFrame.addChild(startButton);
+//     startFrame.addChild(hintText);
+//     hintText.addChild(questionMark);
 
-    const winMax = new Sprite(resources[winMaxURL].texture);
-    winMax.anchor.set(0.5);
-    winMax.position.set(560, 100);
+//     const shadow = new Sprite(resources[shadowURL].texture);
+//     shadow.addChild(resultFrame);
+//     shadow.addChild(startFrame);
+//     shadow.width = w;
+//     shadow.height = h;
 
-    char.position.set(320, 620);
+//     startButton.on('click', () => {
+//         app.stage.removeChild(shadow);
+//     });
+//     ///////////////////////////////////////////////////////////////////////////
 
-    if (char.state.hasAnimation('red_idle_loop')) {
-        char.state.setAnimation(0, 'red_idle_loop', true);
-        console.log(char.state.data);
-    }
+//     const winMax = new Sprite(resources[winMaxURL].texture);
+//     winMax.anchor.set(0.5);
+//     winMax.position.set(560, 100);
 
-    const bonfireSmall = new Sprite(resources[bonfireSmallURL].texture);
+//     char.position.set(320, 620);
 
-    const bonusFrame = new Sprite(resources[bonusFrameURL].texture);
-    bow.anchor.set(0.5);
-    bow.position.x += -20;
-    bow.position.y += 120;
-    bonusFrame.addChild(bow);
+//     if (char.state.hasAnimation('red_idle_loop')) {
+//         char.state.setAnimation(0, 'red_idle_loop', true);
+//         console.log(char.state.data);
+//     }
 
-    bonusFrame.anchor.set(0.5);
-    bonusFrame.position.set(w - 280, 450);
+//     const bonfireSmall = new Sprite(resources[bonfireSmallURL].texture);
 
-    background.frame = rectangle;
+//     const bonusFrame = new Sprite(resources[bonusFrameURL].texture);
+//     bow.anchor.set(0.5);
+//     bow.position.x += -20;
+//     bow.position.y += 120;
+//     bonusFrame.addChild(bow);
 
-    const backgroundS = new Sprite(background);
+//     bonusFrame.anchor.set(0.5);
+//     bonusFrame.position.set(w - 280, 450);
 
-    const cardCoords = [
-        { x: w / 2, y: h / 2 + 405 },
-        { x: w / 2 - 335, y: h / 2 + 405 },
-        { x: w / 2 + 335, y: h / 2 + 405 },
-        { x: w / 2, y: h / 2 + 405 + 335 },
-        { x: w / 2 + 335, y: h / 2 + 405 + 335 },
-        { x: w / 2 - 335, y: h / 2 + 405 + 335 },
-    ];
+//     background.frame = rectangle;
 
-    const container = new Container();
+//     const backgroundS = new Sprite(background);
 
-    cardCoords.forEach(({ x, y }) => {
-        const cardFrame = new Sprite(resources[cardFrameURL].texture);
-        const bonfire = new Sprite(resources[bonfireURL].texture);
-        const scratchFrame = new Sprite(resources[scratchFrameURL].texture);
+//     const cardCoords = [
+//         { x: w / 2, y: h / 2 + 405 },
+//         { x: w / 2 - 335, y: h / 2 + 405 },
+//         { x: w / 2 + 335, y: h / 2 + 405 },
+//         { x: w / 2, y: h / 2 + 405 + 335 },
+//         { x: w / 2 + 335, y: h / 2 + 405 + 335 },
+//         { x: w / 2 - 335, y: h / 2 + 405 + 335 },
+//     ];
 
-        cardFrame.position.set(x, y);
-        cardFrame.anchor.set(0.5);
+//     const container = new Container();
 
-        bonfire.anchor.set(0.5);
+//     cardCoords.forEach(({ x, y }) => {
+//         const cardFrame = new Sprite(resources[cardFrameURL].texture);
+//         const bonfire = new Sprite(resources[bonfireURL].texture);
+//         const scratchFrame = new Sprite(resources[scratchFrameURL].texture);
 
-        scratchFrame.anchor.set(0.5);
+//         cardFrame.position.set(x, y);
+//         cardFrame.anchor.set(0.5);
 
-        container.addChild(cardFrame);
-        cardFrame.addChild(bonfire);
-        cardFrame.addChild(scratchFrame);
-    });
+//         bonfire.anchor.set(0.5);
 
-    backgroundS.width = w;
-    backgroundS.height = h;
+//         scratchFrame.anchor.set(0.5);
 
-    const style = new TextStyle({
-        fontFamily: 'DR',
-        fontSize: 52,
-        align: 'center',
-        fill: 'red',
-    });
+//         container.addChild(cardFrame);
+//         cardFrame.addChild(bonfire);
+//         bonfire.addChild(scratchFrame);
+//     });
 
-    const descriptionText = new Text(
-        'MATCH THE WINNER          AND WIN A PRIZE',
-        style,
-    );
+//     const l = new MyLoader();
 
-    bonfireSmall.anchor.set(0.5);
-    bonfireSmall.position.x += 40;
+//     console.log(l.resources);
 
-    descriptionText.anchor.set(0.5, 0.5);
-    descriptionFrame.anchor.set(0.5, 0.5);
+//     backgroundS.width = w;
+//     backgroundS.height = h;
 
-    descriptionFrame.addChild(descriptionText);
-    descriptionFrame.addChild(bonfireSmall);
+//     const style = new TextStyle({
+//         fontFamily: 'DR',
+//         fontSize: 52,
+//         align: 'center',
+//         fill: 'red',
+//     });
 
-    descriptionFrame.position.set(w / 2, h / 2 + 137);
+//     const descriptionText = new Text(
+//         'MATCH THE WINNER          AND WIN A PRIZE',
+//         style,
+//     );
 
-    app.stage.addChild(backgroundS);
-    app.stage.addChild(char);
-    app.stage.addChild(descriptionFrame);
-    app.stage.addChild(container);
-    app.stage.addChild(bonusFrame);
-    app.stage.addChild(winMax);
-    app.stage.addChild(shadow);
-});
+//     bonfireSmall.anchor.set(0.5);
+//     bonfireSmall.position.x += 40;
+
+//     descriptionText.anchor.set(0.5, 0.5);
+//     descriptionFrame.anchor.set(0.5, 0.5);
+
+//     descriptionFrame.addChild(descriptionText);
+//     descriptionFrame.addChild(bonfireSmall);
+
+//     descriptionFrame.position.set(w / 2, h / 2 + 137);
+
+//     app.stage.addChild(backgroundS);
+//     app.stage.addChild(char);
+//     app.stage.addChild(descriptionFrame);
+//     app.stage.addChild(container);
+//     app.stage.addChild(bonusFrame);
+//     app.stage.addChild(winMax);
+//     app.stage.addChild(shadow);
+
+// });
 
 // LOAD BACKGROUND
 // const bg = () => {
