@@ -22,24 +22,24 @@ export class Background extends PIXISprite {
 export class Card extends MySprite {
     constructor(
         texture: PIXI.Texture,
-        cover: MySprite,
-        cb?: Function,
-        cb2?: Function,
+        // cover: MySprite,
+        // brush: PIXI.Graphics,
+        // RT: PIXI.RenderTexture,
     ) {
         super(texture);
 
-        cover.interactive = true;
-        cover.buttonMode = true;
+        // cover.interactive = true;
+        // cover.buttonMode = true;
 
-        cover.on('pointerdown', () => {
-            cb && cb(this.card);
-            this.removeChildren();
-            this.covered = false;
-        });
+        // cover.on('pointerdown', () => {
+        //     cb && cb(this.card);
+        //     this.removeChildren();
+        //     this.covered = false;
+        // });
 
-        cover.on('pointerover', () => {
-            if (cb2) cb2();
-        });
+        // cover.on('pointerover', () => {
+        //     if (cb2) cb2();
+        // });
 
         const res = this.texture.textureCacheIds[0].match(
             /(leaf|rope|bow|bonfire|tent)/,
@@ -47,10 +47,8 @@ export class Card extends MySprite {
 
         this.card = res ? res[0] : 'none';
 
-        this.addChild(cover);
         this.covered = true;
     }
-
     card: string;
     covered: boolean;
 }

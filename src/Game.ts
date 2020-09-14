@@ -185,6 +185,7 @@ export class Game {
                 this.char.disappointed();
             }
 
+            console.log(this.cardsOpened);
             if (++this.cardsOpened === 7) {
                 this.shadow();
             }
@@ -203,20 +204,19 @@ export class Game {
             scratchFrameBig.position.y += 120;
             bonusFrame.addChild(scratchFrameBig);
         } else {
-            const bonusCard = new Card(
-                this.getByRegexp() as any,
-                scratchFrameBig,
-                openAnimation,
-                worriedAnimation,
-            );
-            bonusCard.position.x += -20;
-            bonusCard.position.y += 120;
-            bonusFrame.addChild(bonusCard);
+            // const bonusCard = new Card(
+            //     this.getByRegexp() as any,
+            //     scratchFrameBig,
+            //     brush,
+            // );
+            // bonusCard.position.x += -20;
+            // bonusCard.position.y += 120;
+            // bonusFrame.addChild(bonusCard);
         }
-        // const brush = new PIXI.Graphics();
-        // brush.beginFill(0xffffff);
-        // brush.drawCircle(0, 0, 150);
-        // brush.endFill();
+        const brush = new PIXI.Graphics();
+        brush.beginFill(0xffffff);
+        brush.drawCircle(0, 0, 150);
+        brush.endFill();
 
         const container = new Container();
         container.addChild(bonusFrame);
@@ -225,6 +225,8 @@ export class Game {
         //     width: this.app.screen.width,
         //     height: this.app.screen.height,
         // });
+
+        // CARDS SCRATCHING
 
         this.cardsPos.forEach(({ x, y }) => {
             if (isFirstLoad) {
@@ -237,62 +239,61 @@ export class Game {
                 const cardFrame = new MySprite( //imageToReveal
                     PIXILoader.resources[cardFrameURL].texture,
                 );
+                cardFrame.position.set(x, y);
 
                 const scratchFrame = new MySprite(
                     PIXILoader.resources[scratchFrameURL].texture,
                 );
 
-                // cardFrame.addChild(scratchFrame);
+                cardFrame.addChild(scratchFrame);
 
-                // const renderTexture = PIXI.RenderTexture.create({
-                //     width: cardFrame.width,
-                //     height: cardFrame.height,
-                // });
+                scratchFrame.width = cardFrame.width;
+                scratchFrame.height = cardFrame.height;
 
-                // const renderTextureSprite = new MySprite(renderTexture);
+                const renderTexture = PIXI.RenderTexture.create({
+                    width: cardFrame.width,
+                    height: cardFrame.height,
+                });
+
+                const renderTextureSprite = new MySprite(renderTexture);
                 const randomTexture = this.getRandom();
-                const randomCard = new Card(
-                    randomTexture,
-                    scratchFrame,
-                    openAnimation,
-                    worriedAnimation,
-                );
+                const randomCard = new Card(randomTexture);
 
                 cardFrame.addChild(randomCard);
+                randomCard.width = cardFrame.width;
+                randomCard.height = cardFrame.height;
 
-                cardFrame.position.set(x, y);
+                cardFrame.addChild(renderTextureSprite);
+                randomCard.mask = renderTextureSprite;
 
-                // cardFrame.addChild(renderTextureSprite);
-                // randomCard.mask = renderTextureSprite;
+                cardFrame.interactive = true;
+                cardFrame.buttonMode = true;
 
-                // cardFrame.interactive = true;
-                // cardFrame.buttonMode = true;
+                const pointerMove = (event: PIXI.InteractionEvent) => {
+                    if (this.dragging) {
+                        brush.position.copyFrom(event.data.global);
+                        this.app.renderer.render(
+                            brush,
+                            renderTexture,
+                            false,
+                            undefined,
+                            false,
+                        );
+                    }
+                };
 
-                // const pointerMove = (event: PIXI.InteractionEvent) => {
-                //     if (this.dragging) {
-                //         brush.position.copyFrom(event.data.global);
-                //         this.app.renderer.render(
-                //             brush,
-                //             renderTexture,
-                //             false,
-                //             undefined,
-                //             false,
-                //         );
-                //     }
-                // };
+                const pointerDown = (event: PIXI.InteractionEvent) => {
+                    this.dragging = true;
+                    pointerMove(event);
+                };
 
-                // const pointerDown = (event: PIXI.InteractionEvent) => {
-                //     this.dragging = true;
-                //     pointerMove(event);
-                // };
+                const pointerUp = (_event: PIXI.InteractionEvent) => {
+                    this.dragging = false;
+                };
 
-                // const pointerUp = (_event: PIXI.InteractionEvent) => {
-                //     this.dragging = false;
-                // };
-
-                // cardFrame.on('pointerup', pointerUp);
-                // cardFrame.on('pointermove', pointerMove);
-                // cardFrame.on('pointerdown', pointerDown);
+                cardFrame.on('pointerup', pointerUp);
+                cardFrame.on('pointermove', pointerMove);
+                cardFrame.on('pointerdown', pointerDown);
 
                 container.addChild(cardFrame);
             }
