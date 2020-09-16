@@ -118,7 +118,7 @@ export class Game {
 
         setTimeout(() => {
             this.positioning();
-        }, 3000);
+        }, 1000);
     };
 
     positioning = () => {
@@ -191,6 +191,12 @@ export class Game {
             }
         };
 
+        const brush = new PIXI.Graphics();
+        brush.beginFill(0xffffff);
+        brush.drawCircle(0, 0, 50);
+        brush.endFill();
+        brush.blendMode = PIXI.BLEND_MODES.ERASE;
+
         const worriedAnimation = () => {
             this.char.worried();
         };
@@ -213,10 +219,6 @@ export class Game {
             // bonusCard.position.y += 120;
             // bonusFrame.addChild(bonusCard);
         }
-        const brush = new PIXI.Graphics();
-        brush.beginFill(0xffffff);
-        brush.drawCircle(0, 0, 150);
-        brush.endFill();
 
         const container = new Container();
         container.addChild(bonusFrame);
@@ -241,37 +243,46 @@ export class Game {
                 );
                 cardFrame.position.set(x, y);
 
-                const scratchFrame = new MySprite(
+                const tempScratchFrame = new MySprite(
                     PIXILoader.resources[scratchFrameURL].texture,
                 );
-
-                cardFrame.addChild(scratchFrame);
-
-                scratchFrame.width = cardFrame.width;
-                scratchFrame.height = cardFrame.height;
+                tempScratchFrame.width = cardFrame.width;
+                tempScratchFrame.height = cardFrame.height;
+                tempScratchFrame.anchor.set(0);
 
                 const renderTexture = PIXI.RenderTexture.create({
                     width: cardFrame.width,
                     height: cardFrame.height,
                 });
+                this.app.renderer.render(tempScratchFrame, renderTexture);
 
                 const renderTextureSprite = new MySprite(renderTexture);
                 const randomTexture = this.getRandom();
                 const randomCard = new Card(randomTexture);
 
                 cardFrame.addChild(randomCard);
-                randomCard.width = cardFrame.width;
-                randomCard.height = cardFrame.height;
+                // randomCard.width = cardFrame.width;
+                // randomCard.height = cardFrame.height;
 
                 cardFrame.addChild(renderTextureSprite);
-                randomCard.mask = renderTextureSprite;
 
                 cardFrame.interactive = true;
                 cardFrame.buttonMode = true;
 
                 const pointerMove = (event: PIXI.InteractionEvent) => {
                     if (this.dragging) {
-                        brush.position.copyFrom(event.data.global);
+                        brush.position.copyFrom(
+                            event.data.getLocalPosition(cardFrame),
+                        );
+                        // relative to center? ok, lets subtract anchor
+                        brush.position.set(
+                            brush.position.x +
+                                renderTextureSprite.anchor.x *
+                                    renderTextureSprite.width,
+                            brush.position.y +
+                                renderTextureSprite.anchor.y *
+                                    renderTextureSprite.width,
+                        );
                         this.app.renderer.render(
                             brush,
                             renderTexture,
@@ -289,6 +300,21 @@ export class Game {
 
                 const pointerUp = (_event: PIXI.InteractionEvent) => {
                     this.dragging = false;
+
+                    // const pixels = this.app.renderer.extract.pixels(
+                    //     renderTexture,
+                    // );
+
+                    // console.log(pixels.length, pixels.length / 150);
+
+                    // pixels.some((pixel, index) => {
+                    //     if (pixel === 0 && index >= pixels.length / 150) {
+                    //         console.log('FOUND!');
+
+                    //         return true;
+                    //     }
+                    //     return false;
+                    // });
                 };
 
                 cardFrame.on('pointerup', pointerUp);
